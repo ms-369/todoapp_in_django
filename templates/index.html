@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 900px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 600px;
+    padding: 10px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button.add {
+    width: 100px;
+    padding: 10px;
+    background-color: #007BFF;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.done, button.edit {
+    width: 100px;
+    padding: 10px;
+    margin-left: 10px;
+    background-color: #007BFF;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+button.delete {
+    width: 100px;
+    padding: 10px;
+    margin-left: 10px;
+    background-color: #ff0000d0;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #05080b;
+}
+
+ul{
+    list-style-type: none;
+    padding: 0;
+    margin: 5px auto;
+    width: 100%; /* Full width */
+    display: flex;
+    align-items: center;
+    /* Space between task and buttons */
+    font-size: large;
+}
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TASKS TO DO</title>
+</head>
+<body>
+    <div class="container">
+        <h1>TO DO APP</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="task_id" value="{% if tasktodo %}{{ tasktodo.id }}{% endif %}">
+            <input name="todo" placeholder="Enter your task here" value="{{ tasktodo.desc }}">
+            <button type="submit" class="add">{% if tasktodo.id %}Update{% else %}Add{% endif %}</button>
+    
+        </form>
+        <div>
+            <h3>TASKS</h3>
+            {% for task in tasklist %}
+            <ul>
+                {% if task.completed %}
+                    <del>{{task.desc}}</del>
+                    <a href="{% url 'delete_task' task.id %}">
+                        <button type="button" class="delete">DELETE</button>
+                    </a> 
+                {% else %}
+                    {{task.desc}}
+                    <a href="{% url 'done_task' task.id %}">
+                        <button type="submit" class="done" >DONE</button>
+                    </a>
+                   
+                    <a href="{% url 'delete_task' task.id %}">
+                        <button type="button" class="delete">DELETE</button>
+                    </a> 
+                    
+                {% endif %}          
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
